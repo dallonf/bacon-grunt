@@ -150,7 +150,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['jshint', 'uglify:build', 'clean:build', 'copy:buildImg', 'copy:buildIndex', 'build:logDone']);
 };
 ```
-a
+
 ## Bacon functions
 
 ### `bacon.loadNpmTasks()`
