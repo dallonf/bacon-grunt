@@ -30,7 +30,7 @@ var bacon = require('grunt-bacon')(grunt);
 Here's a sample (slightly contrived) Gruntfile enhanced by Bacon:
 
 ```js
-module.exports = function(grunt) {
+s = function(grunt) {
   var bacon = require('grunt-bacon')(grunt);
   bacon.loadNpmTasks(); // Automatically scans your node_modules folder
 
@@ -40,10 +40,8 @@ module.exports = function(grunt) {
       options: {
         curly: true
       },
-      src: {
-        files: {
-          src: ['public/js/*.js']
-        }
+      all: {
+        src: ['public/js/**/*.js']
       }
     }
   });
@@ -54,27 +52,33 @@ module.exports = function(grunt) {
 
     // Adds a `uglify:build` task
     // Also creates an alias as `build:uglify` for better readability
-    bacon.subtask('uglify', { // First argument of subtask() is the `files` object
-      src: 'public/js/*.js',
-      dest: 'dist/js/'
-    }, { // Second argument of subtask() is the `options` object
+    bacon.subtask('uglify', { // Second argument of subtask() is the configuration for the task
+      expand: true,
+      cwd: 'public/js'
+      src: '**/*.js',
+      dest: 'dist/js/',
+      ext: '.min.js'
+    }, { // Third argument of subtask() is the `options` object of the configuration
       sourceMap: true
     }),
 
     // Creates `clean:build` task and `build:clean` alias
-    // subtaskConfig() uses the second argument as the entire task configuration
-    bacon.subtaskConfig('clean', ['tmp']),
+    // subtask() uses the second argument as the entire task configuration; it doesn't have to be an object
+    bacon.subtask('clean', ['tmp']),
 
     // For multiple instances of a subtask in a task, you will need more specific names
     // Creates a `copy:buildImg` task and `build:copy:img` alias
     bacon.subtask('copy:img', {
-      src: 'public/img/*.png',
+      expand: true,
+      cwd: 'public/img'
+      src: '**/*.png',
       dest: 'dist/img/'
     }),
 
     // `copy:buildIndex`; alias: `build:copy:index`
     bacon.subtask('copy:index', {
-      'dist/index.html': 'public/index.html'
+      src: 'dist/index.html',
+      dest: 'public/index.html'
     }),
 
     // Can't find a plugin? Just write a quick function to do the job!
@@ -84,7 +88,7 @@ module.exports = function(grunt) {
     })
   ]);
 
-  // This whole task is registered as if you had used:
+  // This whole task is registered like this:
   // grunt.registerTask('build', ['jshint', 'uglify:build', 'clean:build', 'copy:buildImg', 'copy:buildIndex', 'build:logDone']);
 };
 ```
@@ -97,40 +101,38 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     clean: {
-      build: 'tmp'
+      build: ['tmp']
     },
 
     jshint: {
       options: {
         curly: true
       },
-      src: {
-        files: {
-          src: ['public/js/*.js']
-        }
+      all: {
+        src: ['public/js/*.js']
       }
     },
 
     copy: {
       buildImg: {
-        files: {
-          src: 'public/img/*.png',
-          dest: 'dist/img/'
-        }
+        expand: true,
+        cwd: 'public/img'
+        src: '**/*.png',
+        dest: 'dist/img/'
       },
       buildIndex: {
-        files: {
-          'dist/index.html': 'public/index.html'
-        }
+        src: 'dist/index.html',
+        dest: 'public/index.html'
       }
     },
 
     uglify: {
       build: {
-        files: {
-          src: 'public/js/*.js',
-          dest: 'dist/js/'
-        },
+        expand: true,
+        cwd: 'public/js'
+        src: '**/*.js',
+        dest: 'dist/js/',
+        ext: '.min.js',
         options: {
           sourceMap: true
         }
@@ -161,17 +163,11 @@ Scans your project's node_modules directory for folders starting with `grunt-` (
 
 Registers a new task sequence with the name `taskName`.
 
-Any `BaconSubtasks` (created with `bacon.subtask()`, `bacon.subtaskConfig()`, or `bacon.subtaskCustom()`) in the `subtasks` array will be registered with Grunt. In addition, any strings in the `subtasks` array will be interpreted as the name of a task defined elsewhere.
+Any `BaconSubtasks` (created with `bacon.subtask()`, or `bacon.subtaskCustom()`) in the `subtasks` array will be registered with Grunt. In addition, any strings in the `subtasks` array will be interpreted as the name of a task defined elsewhere.
 
 If only strings are used in the `subtasks` array, this function is identical to `grunt.registerTask(taskName, subtasks)`.
 
-### `bacon.subtask(subtaskName: String, files: Object, options: Object)`
-
-Returns a `BaconSubtask` for use with `bacon.task()`. This function provides a concise syntax for the majority of subtasks you will create!
-
-This is syntactic sugar for `bacon.subtaskConfig(subtaskName, {files: files, options: options})`, so refer to the documentation for that method for details.
-
-### `bacon.subtaskConfig(subtaskName: String, config: Object)`
+### `bacon.subtask(subtaskName: String, config: Object[, options: Object])`
 
 Returns a `BaconSubtask` for use with `bacon.task()`.
 
@@ -179,9 +175,15 @@ Example usage:
 ```js
 bacon.task('doThings', [
   // Simple
-  bacon.subtaskConfig('build', 'allTheThings'),
+  bacon.subtask('build', 'allTheThings'),
   // Specific name
-  bacon.subtaskConfig('clean:tmp', ['tmp'])
+  bacon.subtask('clean:tmp', ['tmp']),
+  // With options
+  bacon.subtask('uglify', {
+    src: 'public/**/*.js', dest: 'build'
+  }, {
+    mangle: false
+  })
 ])
 ```
 
@@ -193,6 +195,14 @@ grunt.initConfig({
   },
   clean: {
     doThingsTmp: ['tmp']
+  },
+  uglify: {
+    doThings: {
+      src: 'public/**/*.js', dest: 'build',
+      options: {
+        mangle: false
+      }
+    }
   }
 });
 
@@ -200,11 +210,13 @@ grunt.registerTask('doThings:build', ['build:doThings']);
 grunt.registerTask('doThings:clean:tmp', ['clean:doThingsTmp']);
 ```
 
-The `subtaskName` usually refers to the name of a multiTask (e.g. `clean` and `build` in this example, or `uglify`, `copy`, etc). You can optionally add additional colon-seperated names for additional specificity (e.g. `clean:tmp` in this example, or `copy:img`, `less:bootstrap`, etc). This is sometimes required, since every subtask must have a unique name within the task.
+The `subtaskName` usually refers to the name of a multiTask (e.g. `clean`, `build`, and `uglify` in this example, or `copy`, `less`, etc). You can optionally add additional colon-seperated names for additional specificity (e.g. `clean:tmp` in this example, or `copy:img`, `less:bootstrap`, etc). This is sometimes required, since every subtask must have a unique name within the task.
 
-This function will set `config` as the Grunt configuration for a task with the convention of `<multiTask>:<parentTask><Specificiers>` (any colons in the `subtaskName` will be converted to camelcase). The examples above will create Grunt configuration for a `cleanThings:clean` and `cleanThings:cleanTmp` task, respectively.
+This function will set `config` as the Grunt configuration for a task with the convention of `<multiTask>:<parentTask><Specificiers>` (any colons in the `subtaskName` will be converted to camelcase). The examples above will create Grunt configuration for `build:doThings`, `clean:doThingsTmp`, and `uglify:doThings` tasks, respectively.
 
-For more intuitive task names, this function will also create an alias to this task called `<parentTask>:<subtaskName>`. In this example, the aliases are `doThings:build` and `doThings:clean:tmp`, respectively.
+If the optional `options` argument is provided, the value will merged into `config` with a key of `options`; see the `uglify` task in this example.
+
+For more intuitive task names, this function will also create an alias to this task called `<parentTask>:<subtaskName>`. In this example, the aliases are `doThings:build`, `doThings:clean:tmp`, and `doThings:uglify` respectively.
 
 ### `bacon.subtaskCustom(subtaskName: String, subtask: Function)`
 
@@ -227,7 +239,7 @@ grunt.registerTask('doThings:build:allTheThings', function() {
 });
 ```
 
-This mounts the `subtask` function as a task called `<parentTask>:<subtaskName>`. Unlike with `bacon.subtaskConfig`, colons in the `subtaskName` are left mostly untouched. (In this example, the task is created as `doThings:build:allTheThings`).
+This mounts the `subtask` function as a task called `<parentTask>:<subtaskName>`. Unlike with `bacon.subtask()`, colons in the `subtaskName` are left mostly untouched. (In this example, the task is created as `doThings:build:allTheThings`).
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
