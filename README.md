@@ -246,4 +246,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+* v0.2.0: Major refactor of `bacon.subtask()`, removed `bacon.subtaskConfig()`.
 * v0.1.0: First release!
