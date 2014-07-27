@@ -37,14 +37,12 @@ module.exports = function(grunt) {
   // grunt.initConfig() is used for global tasks only - the way it should be!
   grunt.initConfig({
     jshint: {
-      jshint: {
-        options: {
-          curly: true
-        },
-        src: {
-          files: {
-            src: ['public/js/*.js']
-          }
+      options: {
+        curly: true
+      },
+      src: {
+        files: {
+          src: ['public/js/*.js']
         }
       }
     }
@@ -86,7 +84,7 @@ module.exports = function(grunt) {
     })
   ]);
 
-  // This whole task is registered like this:
+  // This whole task is registered as if you had used:
   // grunt.registerTask('build', ['jshint', 'uglify:build', 'clean:build', 'copy:buildImg', 'copy:buildIndex', 'build:logDone']);
 };
 ```
@@ -149,29 +147,31 @@ module.exports = function(grunt) {
     console.log("Done!");
   });
 
-  grunt.registerTask('build', ['jshint', uglify:build', 'clean:build', 'copy:buildImg', 'copy:buildIndex', 'build:logDone']);
+  grunt.registerTask('build', ['jshint', 'uglify:build', 'clean:build', 'copy:buildImg', 'copy:buildIndex', 'build:logDone']);
 };
 ```
 
 ## Bacon functions
 
-### bacon.loadNpmTasks()
+### `bacon.loadNpmTasks()`
 
 Scans your project's node_modules directory for folders starting with `grunt-` (Exlcuding `grunt-bacon`, of course!) and calls `grunt.loadNpmTasks()` on each one.
 
-### bacon.task(taskName: String, subtasks: [String or BaconSubtask])
+### `bacon.task(taskName: String, subtasks: [String or BaconSubtask])`
 
 Registers a new task sequence with the name `taskName`.
 
-Any `BaconSubtasks` (created with `bacon.subtask()`, `bacon.subtaskConfig()`, or `bacon.subtaskCustom()`) in the `subtasks` array will be registered with Grunt. Any strings will be interpreted as the name of a task that is registered with Grunt in the normal non-Bacon fashion (i.e. `grunt.registerTask()` or `grunt.initConfig()`)
+Any `BaconSubtasks` (created with `bacon.subtask()`, `bacon.subtaskConfig()`, or `bacon.subtaskCustom()`) in the `subtasks` array will be registered with Grunt. In addition, any strings in the `subtasks` array will be interpreted as the name of a task defined elsewhere.
 
-### bacon.subtask(subtaskName: String, files: Object, options: Object)
+If only strings are used in the `subtasks` array, this function is identical to `grunt.registerTask(taskName, subtasks)`.
+
+### `bacon.subtask(subtaskName: String, files: Object, options: Object)`
 
 Returns a `BaconSubtask` for use with `bacon.task()`. This function provides a concise syntax for the majority of subtasks you will create!
 
 This is syntactic sugar for `bacon.subtaskConfig(subtaskName, {files: files, options: options})`, so refer to the documentation for that method for details.
 
-### bacon.subtaskConfig(subtaskName: String, config: Object)
+### `bacon.subtaskConfig(subtaskName: String, config: Object)`
 
 Returns a `BaconSubtask` for use with `bacon.task()`.
 
@@ -206,7 +206,7 @@ This function will set `config` as the Grunt configuration for a task with the c
 
 For more intuitive task names, this function will also create an alias to this task called `<parentTask>:<subtaskName>`. In this example, the aliases are `doThings:build` and `doThings:clean:tmp`, respectively.
 
-### bacon.subtaskCustom(subtaskName: String, subtask: Function)
+### `bacon.subtaskCustom(subtaskName: String, subtask: Function)`
 
 Returns a `BaconSubtask` for use with `bacon.task()`.
 
