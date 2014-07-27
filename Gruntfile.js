@@ -37,14 +37,15 @@ module.exports = function(grunt) {
 
     // Test the files argument of subtask()
     bacon.subtask('testFiles', {
-      'tmp/custom_options': 'test/fixtures/123'
+      src: 'tmp/custom_options',
+      dest: 'test/fixtures/123'
     }),
     // Test the options argument of subtask()
     bacon.subtask('testOptions', {}, {
       test: 'tested'
     }),
     // Test subtaskConfig()
-    bacon.subtaskConfig('testConfig', {
+    bacon.subtask('testConfig', {
       testConfig: 'configTest'
     }),
     // // Test customSubtask()
@@ -52,16 +53,16 @@ module.exports = function(grunt) {
       grunt.config.set('__testOutput__.custom.success', true);
     }),
     // Test multi-subtasks
-    bacon.subtaskConfig('testMulti:superman', {
+    bacon.subtask('testMulti:superman', {
       superpower: 'everything'
     }),
-    bacon.subtaskConfig('testMulti:batman', {
+    bacon.subtask('testMulti:batman', {
       superpower: 'being batman'
     }),
 
     'testLiteral',
 
     // Unit tests.
-    bacon.subtaskConfig('nodeunit', ['test/*_test.js'])
+    bacon.subtask('nodeunit', ['test/*_test.js'])
   ]);
 };

@@ -48,10 +48,8 @@ exports.bacon = {
     test.expect(3);
 
     test.deepEqual(grunt.config.get('testFiles.test'), {
-      files:  {
-        'tmp/custom_options': 'test/fixtures/123'
-      },
-      options: undefined
+      src: 'tmp/custom_options',
+      dest: 'test/fixtures/123'
     }, "should have created configuration for the testFiles:test task");
     test.ok(grunt.task.exists('test:testFiles'), "should have created a test:testFiles alias task");
     test.equal(grunt.config.get('__testOutput__.files.called'), 'test', "should have run the testFiles:test task");
@@ -62,7 +60,6 @@ exports.bacon = {
     test.expect(3);
 
     test.deepEqual(grunt.config.get('testOptions.test'), {
-      files: {},
       options: {
         test: 'tested'
       }
@@ -103,8 +100,8 @@ exports.bacon = {
 
     test.throws(function() {
       bacon.task('uniqueNamesTest', [
-        bacon.subtaskConfig('multi', {}),
-        bacon.subtaskConfig('multi', {})
+        bacon.subtask('multi', {}),
+        bacon.subtask('multi', {})
       ]);
     });
 
