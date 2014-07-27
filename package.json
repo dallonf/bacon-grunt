@@ -40,7 +40,6 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "inflection": "^1.3.8",
-    "underscore": "^1.6.0"
+    "inflection": "^1.3.8"
   }
 }
