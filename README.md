@@ -31,7 +31,7 @@ var bacon = require('bacon-grunt')(grunt);
 Here's a sample (slightly contrived) Gruntfile enhanced by Bacon:
 
 ```js
-s = function(grunt) {
+module.exports = function(grunt) {
   var bacon = require('bacon-grunt')(grunt);  
   require('load-grunt-tasks')(grunt); // If you're not using load-grunt-tasks, you should be!
 
