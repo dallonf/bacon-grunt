@@ -1,7 +1,7 @@
 {
   "name": "bacon-grunt",
   "description": "Makes for tastier Gruntfiles",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/DallonF/bacon-grunt",
   "author": {
     "name": "Dallon Feldner",
