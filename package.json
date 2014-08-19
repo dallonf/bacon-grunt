@@ -1,8 +1,8 @@
 {
-  "name": "grunt-bacon",
+  "name": "bacon-grunt",
   "description": "Makes for tastier Gruntfiles",
   "version": "0.2.0",
-  "homepage": "https://github.com/DallonF/grunt-bacon",
+  "homepage": "https://github.com/DallonF/bacon-grunt",
   "author": {
     "name": "Dallon Feldner",
     "email": "dallonfdev@gmail.com",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/DallonF/grunt-bacon.git"
+    "url": "git://github.com/DallonF/bacon-grunt.git"
   },
   "bugs": {
-    "url": "https://github.com/DallonF/grunt-bacon/issues"
+    "url": "https://github.com/DallonF/bacon-grunt/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/DallonF/grunt-bacon/blob/master/LICENSE-MIT"
+      "url": "https://github.com/DallonF/bacon-grunt/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {

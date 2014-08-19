@@ -1,6 +1,6 @@
 /*
- * grunt-bacon
- * https://github.com/DallonF/grunt-bacon
+ * bacon-grunt
+ * https://github.com/DallonF/bacon-grunt
  *
  * Copyright (c) 2014 Dallon Feldner
  * Licensed under the MIT license.

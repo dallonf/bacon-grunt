@@ -1,6 +1,7 @@
-# grunt-bacon
+# Bacon for Grunt
 
 > Makes for tastier Gruntfiles
+> (not in any way related to [Bacon.js](http://baconjs.github.io/))
 
 ## Features
 
@@ -11,18 +12,18 @@
 * It's so good I named it "Bacon".
 
 ## Getting Started
-This plugin requires Grunt `~0.4.5`
+This add-on requires Grunt `~0.4.5`
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains Grunt's inner workings. Once you're familiar with the basics of Grunt, you may install Bacon with this command:
 
 ```shell
-npm install grunt-bacon --save-dev
+npm install bacon-grunt --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once the module has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-var bacon = require('grunt-bacon')(grunt);
+var bacon = require('bacon-grunt')(grunt);
 ```
 
 ## Overview
@@ -31,7 +32,7 @@ Here's a sample (slightly contrived) Gruntfile enhanced by Bacon:
 
 ```js
 s = function(grunt) {
-  var bacon = require('grunt-bacon')(grunt);
+  var bacon = require('bacon-grunt')(grunt);
   bacon.loadNpmTasks(); // Automatically scans your node_modules folder
 
   // grunt.initConfig() is used for global tasks only - the way it should be!
@@ -154,10 +155,6 @@ module.exports = function(grunt) {
 ```
 
 ## Bacon functions
-
-### `bacon.loadNpmTasks()`
-
-Scans your project's node_modules directory for folders starting with `grunt-` (Exlcuding `grunt-bacon`, of course!) and calls `grunt.loadNpmTasks()` on each one.
 
 ### `bacon.task(taskName: String, subtasks: [String or BaconSubtask])`
 
