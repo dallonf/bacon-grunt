@@ -32,8 +32,8 @@ Here's a sample (slightly contrived) Gruntfile enhanced by Bacon:
 
 ```js
 s = function(grunt) {
-  var bacon = require('bacon-grunt')(grunt);
-  bacon.loadNpmTasks(); // Automatically scans your node_modules folder
+  var bacon = require('bacon-grunt')(grunt);  
+  require('load-grunt-tasks')(grunt); // If you're not using load-grunt-tasks, you should be!
 
   // grunt.initConfig() is used for global tasks only - the way it should be!
   grunt.initConfig({
@@ -94,7 +94,7 @@ s = function(grunt) {
 };
 ```
 
-For comparison, here's the same Gruntfile written without Bacon. Notice how you need to scroll back and forth between the `grunt.registerTask()` calls and the `grunt.initConfig()` section in order to understand it:
+For comparison, here's the same Gruntfile written without Bacon and [load-grunt-tasks](https://github.com/sindresorhus/load-grunt-tasks) (a fellow warrior in the battle against messy Gruntfiles). Notice how you need to scroll back and forth between the `grunt.registerTask()` calls and the `grunt.initConfig()` section in order to understand it:
 
 ```js
 module.exports = function(grunt) {
@@ -243,5 +243,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+* v0.3.0: Renamed to `bacon-grunt` from `grunt-bacon`; removed `bacon.loadNpmTasks()`.
 * v0.2.0: Major refactor of `bacon.subtask()`, removed `bacon.subtaskConfig()`.
 * v0.1.0: First release!

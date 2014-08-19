@@ -10,7 +10,8 @@
 
 module.exports = function(grunt) {
   var bacon = require('./index')(grunt);
-  bacon.loadNpmTasks();
+  require('load-grunt-tasks')(grunt);
+  
   grunt.loadTasks('test/tasks');
 
   // Project configuration.
