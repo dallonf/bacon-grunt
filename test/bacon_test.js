@@ -106,5 +106,36 @@ exports.bacon = {
     });
 
     test.done();
+  },
+  test_globfiles: function(test) {
+    test.expect(4);
+
+    test.throws(function() {
+      bacon.globFiles('public/js/foo.js', 'dist/js');
+    });
+
+    test.deepEqual(bacon.globFiles('public/js/**/*.js', 'dist/js'), {
+      expand: true,
+      cwd: 'public/js/',
+      src: '**/*.js',
+      dest: 'dist/js'
+    }, "should configure glob files");
+
+    test.deepEqual(bacon.globFiles('public/js/*.js', 'dist/js'), {
+      expand: true,
+      cwd: 'public/js/',
+      src: '*.js',
+      dest: 'dist/js'
+    }, "should configure glob files with a single level");
+
+    test.deepEqual(bacon.globFiles('public/js/*.js', 'dist/js', { ext: '.min.js' }), {
+      expand: true,
+      cwd: 'public/js/',
+      src: '*.js',
+      dest: 'dist/js',
+      ext: '.min.js'
+    }, "should include extras")
+
+    test.done();
   }
 };

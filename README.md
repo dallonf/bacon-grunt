@@ -7,7 +7,7 @@
 
 * Allows inline definition of every task in a sequence
 * No more scrolling back and forth between `grunt.registerTask` and `grunt.initConfig()`
-* Automatically import all npm tasks
+* Define glob patterns in one line of code instead of four!
 * Just syntactic sugar! All Grunt functionality works just like it used to.
 * It's so good I named it "Bacon".
 
@@ -53,15 +53,14 @@ s = function(grunt) {
 
     // Adds a `uglify:build` task
     // Also creates an alias as `build:uglify` for better readability
-    bacon.subtask('uglify', { // Second argument of subtask() is the configuration for the task
-      expand: true,
-      cwd: 'public/js'
-      src: '**/*.js',
-      dest: 'dist/js/',
-      ext: '.min.js'
-    }, { // Third argument of subtask() is the `options` object of the configuration
-      sourceMap: true
-    }),
+    bacon.subtask('uglify', 
+      // Second argument of subtask() is the configuration for the task
+      // bacon.globFiles() automatically generates an `expand: true` configuration block
+      bacon.globFiles('public/js/**/*.js', 'dist/js/', {
+        ext: .min.js'
+      }), { // Third argument of subtask() is the `options` object of the configuration
+        sourceMap: true
+      }),
 
     // Creates `clean:build` task and `build:clean` alias
     // subtask() uses the second argument as the entire task configuration; it doesn't have to be an object
@@ -69,12 +68,7 @@ s = function(grunt) {
 
     // For multiple instances of a subtask in a task, you will need more specific names
     // Creates a `copy:buildImg` task and `build:copy:img` alias
-    bacon.subtask('copy:img', {
-      expand: true,
-      cwd: 'public/img'
-      src: '**/*.png',
-      dest: 'dist/img/'
-    }),
+    bacon.subtask('copy:img', bacon.globFiles('public/img/**/*.png', 'dist/img/')),
 
     // `copy:buildIndex`; alias: `build:copy:index`
     bacon.subtask('copy:index', {
@@ -117,7 +111,7 @@ module.exports = function(grunt) {
     copy: {
       buildImg: {
         expand: true,
-        cwd: 'public/img'
+        cwd: 'public/img/'
         src: '**/*.png',
         dest: 'dist/img/'
       },
@@ -130,7 +124,7 @@ module.exports = function(grunt) {
     uglify: {
       build: {
         expand: true,
-        cwd: 'public/js'
+        cwd: 'public/js/'
         src: '**/*.js',
         dest: 'dist/js/',
         ext: '.min.js',
@@ -238,11 +232,43 @@ grunt.registerTask('doThings:build:allTheThings', function() {
 
 This mounts the `subtask` function as a task called `<parentTask>:<subtaskName>`. Unlike with `bacon.subtask()`, colons in the `subtaskName` are left mostly untouched. (In this example, the task is created as `doThings:build:allTheThings`).
 
+### `bacon.globFiles(src: String, dest: String[, extras: Object])`
+
+Returns an Object configuration for [building a Files list dynamically](http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically).
+
+The `src` argument will be split between the `cwd` and `src` properties of the return object: everything before the first wildcard (`*`) will be put into `cwd`.
+
+Any properties in `extras` will be merged into the result.
+
+Example usage: 
+```js
+bacon.task('build', [
+  bacon.subtask('uglify', bacon.globFiles('public/js/**/*.js', 'dist/js', { 
+    ext: '.min.js'
+  }))
+])
+```
+
+Equivalent vanilla Gruntfile:
+```js
+grunt.initConfig({
+  uglify: {
+    build: {
+      expand: true,
+      cwd: 'public/js/',
+      src: '**/*.js',
+      dest: 'dist/js',
+      ext: '.min.js'
+    }
+  }
+});
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
 
-* v0.3.0: Renamed to `bacon-grunt` from `grunt-bacon`; removed `bacon.loadNpmTasks()`.
+* v0.3.0: Renamed to `bacon-grunt` from `grunt-bacon`; removed `bacon.loadNpmTasks()`. Added `bacon.globFiles()`.
 * v0.2.0: Major refactor of `bacon.subtask()`, removed `bacon.subtaskConfig()`.
 * v0.1.0: First release!
