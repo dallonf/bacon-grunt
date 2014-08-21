@@ -57,7 +57,7 @@ module.exports = function(grunt) {
       // Second argument of subtask() is the configuration for the task
       // bacon.globFiles() automatically generates an `expand: true` configuration block
       bacon.globFiles('public/js/**/*.js', 'dist/js/', {
-        ext: .min.js'
+        ext: '.min.js'
       }), { // Third argument of subtask() is the `options` object of the configuration
         sourceMap: true
       }),
