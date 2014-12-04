@@ -243,7 +243,6 @@ Optional `extras`:
 * `exclude`: A String or array of Strings representing glob patterns that should *not* be matched.
 
 Any properties in `extras` will be merged into the result.
-```
 
 Example usage: 
 
