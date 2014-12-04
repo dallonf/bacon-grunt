@@ -238,12 +238,18 @@ Returns an Object configuration for [building a Files list dynamically](http://g
 
 The `src` argument will be split between the `cwd` and `src` properties of the return object: everything before the first wildcard (`*`) will be put into `cwd`.
 
+Optional `extras`:
+
+* `exclude`: A String or array of Strings representing glob patterns that should *not* be matched.
+
 Any properties in `extras` will be merged into the result.
+```
 
 Example usage: 
 ```js
 bacon.task('build', [
   bacon.subtask('uglify', bacon.globFiles('public/js/**/*.js', 'dist/js', { 
+    exclude: ['public/js/vendor/**/*.js', 'public/js/jquery.js']
     ext: '.min.js'
   }))
 ])
@@ -255,7 +261,7 @@ grunt.initConfig({
   uglify: {
     build: {
       expand: true,
-      cwd: 'public/js/',
+      cwd: ['public/js/', '!vendor/**/*.js', '!jquery.js'],
       src: '**/*.js',
       dest: 'dist/js',
       ext: '.min.js'
@@ -269,6 +275,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+* v0.3.1: Added `expand` option to bacon.globFiles
 * v0.3.0: Renamed to `bacon-grunt` from `grunt-bacon`; removed `bacon.loadNpmTasks()`. Added `bacon.globFiles()`.
 * v0.2.0: Major refactor of `bacon.subtask()`, removed `bacon.subtaskConfig()`.
 * v0.1.0: First release!

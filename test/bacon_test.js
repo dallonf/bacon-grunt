@@ -108,7 +108,7 @@ exports.bacon = {
     test.done();
   },
   test_globfiles: function(test) {
-    test.expect(4);
+    test.expect(6);
 
     test.throws(function() {
       bacon.globFiles('public/js/foo.js', 'dist/js');
@@ -134,7 +134,25 @@ exports.bacon = {
       src: '*.js',
       dest: 'dist/js',
       ext: '.min.js'
-    }, "should include extras")
+    }, "should include extras");
+
+    test.deepEqual(bacon.globFiles('public/*.js', 'dist/js', {
+      exclude: 'public/bower_components/**'
+    }), {
+      expand: true,
+      cwd: 'public/',
+      src: ['*.js', '!bower_components/**'],
+      dest: 'dist/js'
+    }, "should exclude a directory");
+
+    test.deepEqual(bacon.globFiles('public/*.js', 'dist/js', {
+      exclude: ['public/bower_components/**', 'public/vendor/**/*.js']
+    }), {
+      expand: true,
+      cwd: 'public/',
+      src: ['*.js', '!bower_components/**', '!vendor/**/*.js'],
+      dest: 'dist/js'
+    }, "should exclude multiple directories");
 
     test.done();
   }
