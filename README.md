@@ -246,6 +246,7 @@ Any properties in `extras` will be merged into the result.
 ```
 
 Example usage: 
+
 ```js
 bacon.task('build', [
   bacon.subtask('uglify', bacon.globFiles('public/js/**/*.js', 'dist/js', { 
