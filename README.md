@@ -1,3 +1,7 @@
+# ⚠ DEPRECATED ⚠
+
+I don't use Grunt anymore, so I don't maintain this package.
+
 # Bacon for Grunt
 
 > Makes for tastier Gruntfiles
@@ -12,7 +16,7 @@
 * It's so good I named it "Bacon".
 
 ## Getting Started
-This add-on requires Grunt `~0.4.5`
+This add-on requires Grunt 1.x.
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains Grunt's inner workings. Once you're familiar with the basics of Grunt, you may install Bacon with this command:
 
@@ -272,10 +276,3 @@ grunt.initConfig({
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-
-* v0.3.1: Added `expand` option to bacon.globFiles
-* v0.3.0: Renamed to `bacon-grunt` from `grunt-bacon`; removed `bacon.loadNpmTasks()`. Added `bacon.globFiles()`.
-* v0.2.0: Major refactor of `bacon.subtask()`, removed `bacon.subtaskConfig()`.
-* v0.1.0: First release!
